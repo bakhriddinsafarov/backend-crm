@@ -1,0 +1,44 @@
+security:
+    password_hashers:
+        App\Entity\User:
+            algorithm: plaintext
+
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        # /api/users/create endpoint'iga POST orqali murojaat qilinganda - token so'ralmasin
+        user_create:
+            pattern: ^/api/users/create$
+            methods:
+                - post
+            security: false
+
+        file_create:
+            pattern: ^/api/media_objects$
+            methods:
+                - post
+            security: false
+
+        main:
+            stateless: true
+            provider: app_user_provider
+            json_login:
+                check_path: /api/users/auth
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+            jwt: ~
+
+    access_control:
+        - { path: ^/api/.+, roles: IS_AUTHENTICATED_FULLY}
+        - { path: ^/api, roles: PUBLIC_ACCESS}
+

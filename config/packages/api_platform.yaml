@@ -1,0 +1,17 @@
+api_platform:
+    title: CRM platform project
+    version: 1.0.0
+    defaults:
+        stateless: true
+        cache_headers:
+            vary: ['Content-Type', 'Authorization', 'Origin']
+    use_symfony_listeners: true
+    swagger:
+        api_keys:
+            JWT:
+                name: Authorization
+                type: header
+    formats:
+        jsonld: ["application/ld+json"]
+        json: ["application/json"]
+        multipart: ['multipart/form-data']
